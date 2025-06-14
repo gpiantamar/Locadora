@@ -1,0 +1,78 @@
+@model CarLoc.Models.Veiculo
+
+@{
+    ViewData["Title"] = "Detalhes do Veículo";
+}
+
+<h1>Detalhes do Veículo</h1>
+
+<div>
+    <h4>Informações</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Marca</dt>
+        <dd class="col-sm-10">@Model.Marca</dd>
+
+        <dt class="col-sm-2">Modelo</dt>
+        <dd class="col-sm-10">@Model.Modelo</dd>
+
+        <dt class="col-sm-2">Ano</dt>
+        <dd class="col-sm-10">@Model.Ano</dd>
+
+        <dt class="col-sm-2">Placa</dt>
+        <dd class="col-sm-10">@Model.Placa</dd>
+
+        <dt class="col-sm-2">Cor</dt>
+        <dd class="col-sm-10">@Model.Cor</dd>
+
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status?.Nome</dd>
+
+        <dt class="col-sm-2">Categoria</dt>
+        <dd class="col-sm-10">@Model.Categoria?.Nome</dd>
+    </dl>
+</div>
+
+<hr />
+
+<h4>Histórico de Contratos</h4>
+
+@if (Model.Contratos != null && Model.Contratos.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID do Contrato</th>
+                <th>Cliente</th>
+                <th>Data de Início</th>
+                <th>Data de Término</th>
+                <th>Valor Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contrato in Model.Contratos)
+            {
+                <tr>
+                    <td>@contrato.Id</td>
+                    <td>@contrato.Cliente?.Nome</td>
+                    <td>@contrato.DataInicio.ToString("dd/MM/yyyy")</td>
+                    <td>@contrato.DataTermino.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        R$ @(contrato.ValorTotal.HasValue ? contrato.ValorTotal.Value.ToString("N2") : contrato.CalcularValorTotal().ToString("N2"))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><em>Este veículo ainda não participou de nenhum contrato.</em></p>
+}
+
+<hr />
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+</div>

@@ -1,54 +1,98 @@
 @model CarLoc.Models.Cliente
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes do Cliente";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Garante que o layout seja aplicado
 }
 
-<h1>Details</h1>
+<h1>Detalhes do Cliente</h1>
 
 <div>
     <h4>Cliente</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nome)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nome)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Telefone)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Telefone)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Endereco)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Endereco)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RG)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RG)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CPF)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CPF)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DataNascimento)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DataNascimento)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<hr />
+
+<!-- Histórico de contratos -->
+<h4>Histórico de Contratos</h4>
+
+@if (Model.Contratos != null && Model.Contratos.Any())
+{
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID do Contrato</th>
+                <th>Carro</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+                <th>Valor Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contrato in Model.Contratos)
+            {
+                <tr>
+                    <td>@contrato.Id</td>
+                    <td>@($"{contrato.Veiculo?.Modelo} - {contrato.Veiculo?.Placa}")</td>
+                    <td>@contrato.DataInicio.ToShortDateString()</td>
+                    <td>@contrato.DataTermino.ToShortDateString()</td>
+                    <td>@(contrato.ValorTotal?.ToString("C") ?? "R$ 0,00")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><em>Este cliente ainda não possui contratos registrados.</em></p>
+}
+
+<hr />
+<div class="mt-3">
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+    <a class="btn btn-secondary" asp-action="Index">Voltar à Lista</a>
 </div>

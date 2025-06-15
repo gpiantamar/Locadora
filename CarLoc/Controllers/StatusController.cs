@@ -29,19 +29,19 @@ namespace CarLoc.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var status = await _context.Status
+                .Include(s => s.Veiculos!)
+                    .ThenInclude(v => v.Categoria)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (status == null)
-            {
                 return NotFound();
-            }
 
             return View(status);
         }
+
 
         // GET: Status/Create
         public IActionResult Create()

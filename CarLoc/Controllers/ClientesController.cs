@@ -34,7 +34,10 @@ namespace CarLoc.Controllers
             }
 
             var cliente = await _context.Cliente
+                .Include(c => c.Contratos!)
+                    .ThenInclude(ct => ct.Veiculo)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cliente == null)
             {
                 return NotFound();
@@ -42,6 +45,7 @@ namespace CarLoc.Controllers
 
             return View(cliente);
         }
+
 
         // GET: Clientes/Create
         public IActionResult Create()
